@@ -1,6 +1,10 @@
 " misdreavus-session: crude session management
 " (c) 2020 QuietMisdreavus
 
+" This Source Code Form is subject to the terms of the Mozilla Public
+" License, v. 2.0. If a copy of the MPL was not distributed with this
+" file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
 " the variable `g:misdreavus_session_autosave` controls the 'auto-save' behavior when Vim is exited.
 "
 " there are three known values:
