@@ -58,8 +58,10 @@ function! s:auto_save()
 endfunction
 
 augroup MisdreavusSession
+    autocmd!
+
     autocmd User SessionSavePre let s:session_saved = 1
-    autocmd BufAdd,BufDelete,BufNew,BufUnload,BufWipeout,BufEnter * unlet! s:session_saved
+    autocmd BufAdd,BufDelete,BufNew,BufWipeout,BufEnter * unlet! s:session_saved
     autocmd WinNew,WinEnter,WinLeave * unlet! s:session_saved
     autocmd VimLeavePre * call <sid>auto_save()
 augroup END
