@@ -57,6 +57,10 @@ function! s:auto_save()
     endif
 endfunction
 
+function! MisdreavusSessionStatus()
+    return exists('s:session_saved')
+endfunction
+
 augroup MisdreavusSession
     autocmd!
 
