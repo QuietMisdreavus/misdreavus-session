@@ -63,11 +63,13 @@ function! s:auto_save()
         return
     endif
 
-    if g:misdreavus_session_autosave == 'no'
+    let l:autosave = g:misdreavus_session_autosave
+
+    if l:autosave ==? 'no'
         return
-    elseif g:misdreavus_session_autosave == 'yes'
+    elseif l:autosave ==? 'yes'
         call s:save_session(v:this_session)
-    elseif g:misdreavus_session_autosave == 'prompt'
+    elseif l:autosave ==? 'prompt'
         let resp = confirm('Save session file?', "&Yes\n&No", 1, 'Question')
         if resp == 1
             call s:save_session(v:this_session)
@@ -109,14 +111,14 @@ function! s:auto_load()
 
     let l:autoload = g:misdreavus_session_autoload
 
-    if l:autoload != 'yes' && l:autoload != 'prompt'
+    if l:autoload !=? 'yes' && l:autoload !=? 'prompt'
         " the user has not set up auto-loading
         return
     endif
 
     let l:sessname = g:misdreavus_session_default
 
-    if l:autoload == 'prompt' && filereadable(l:sessname) && filewritable(l:sessname)
+    if l:autoload ==? 'prompt' && filereadable(l:sessname) && filewritable(l:sessname)
         let resp = confirm('Load session "' .. l:sessname .. '"?', "&Yes\n&No", 1, "Question")
         if resp != 1
             return
