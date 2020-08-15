@@ -22,6 +22,20 @@ if !exists('g:misdreavus_session_default')
     let g:misdreavus_session_default = 'Session.vim'
 endif
 
+" the variable `g:misdreavus_session_autoload` controls the 'auto-load' behavior when Vim is
+" started.
+"
+" there are three known values:
+"
+" * 'no' (default): do not load a session when Vim starts up.
+" * 'yes': if vim was started without a `-S` flag or an argument list, and a file with the name
+"   given by `g:misdreavus_session_default` exists, load it.
+" * 'prompt': if all the above conditions for 'yes' are true, prompt the user to load a session on
+"   startup.
+if !exists('g:misdreavus_session_autoload')
+    let g:misdreavus_session_autoload = 'no'
+endif
+
 function! s:save_session(name)
     if a:name == ""
         if empty(v:this_session)
@@ -61,6 +75,59 @@ function! s:auto_save()
     endif
 endfunction
 
+function! s:load_session(name, silent)
+    if empty(a:name)
+        let l:name = g:misdreavus_session_default
+    else
+        let l:name = a:name
+    endif
+
+    if !filereadable(l:name) || !filewritable(l:name)
+        " there's no session file to load, or the permissions on it are bad
+        if !a:silent
+            echoerr 'session file "' .. l:name .. '" does not exist'
+        endif
+        return
+    endif
+
+    execute "source " .. l:name
+endfunction
+
+function! s:auto_load()
+    if index(v:argv, '-S') >= 0
+        " if we loaded a session from the command-line, don't bother loading another
+        return
+    endif
+
+    if argc() > 0
+        " if they manually gave files in the argument list, don't bother loading a session, that
+        " would wipe that list out
+        return
+    endif
+
+    let l:autoload = g:misdreavus_session_autoload
+
+    if l:autoload != 'yes' && l:autoload != 'prompt'
+        " the user has not set up auto-loading
+        return
+    endif
+
+    let l:sessname = g:misdreavus_session_default
+
+    if l:autoload == 'prompt' && filereadable(l:sessname) && filewritable(l:sessname)
+        let resp = confirm('Load session "' .. l:sessname .. '"?', "&Yes\n&No", 1, "Question")
+        if resp != 1
+            return
+        endif
+    endif
+
+    if v:vim_did_enter
+        call s:load_session(l:sessname, v:true)
+    else
+        autocmd VimEnter * ++once ++nested call s:load_session(l:sessname, v:true)
+    endif
+endfunction
+
 function! MisdreavusSessionStatus()
     return exists('s:session_saved')
 endfunction
@@ -75,3 +142,11 @@ augroup MisdreavusSession
 augroup END
 
 command -nargs=? -complete=file SaveSession call <sid>save_session(<q-args>)
+command -nargs=? -complete=file LoadSession call <sid>load_session(<q-args>, v:false)
+
+" when the script is loaded, check for whether we should auto-load anything
+if v:vim_did_enter
+    call s:auto_load()
+else
+    autocmd VimEnter * ++once ++nested call s:auto_load()
+endif
