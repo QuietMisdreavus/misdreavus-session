@@ -142,6 +142,7 @@ augroup MisdreavusSession
 augroup END
 
 command -nargs=? -complete=file SaveSession call <sid>save_session(<q-args>)
+command -nargs=0 -bang          SessionQuit SaveSession | q<bang>
 command -nargs=? -complete=file LoadSession call <sid>load_session(<q-args>, v:false)
 
 " when the script is loaded, check for whether we should auto-load anything
