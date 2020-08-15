@@ -94,6 +94,8 @@ function! s:load_session(name, silent)
 endfunction
 
 function! s:auto_load()
+    let s:done_auto_load = 1
+
     if index(v:argv, '-S') >= 0
         " if we loaded a session from the command-line, don't bother loading another
         return
@@ -144,6 +146,11 @@ augroup END
 command -nargs=? -complete=file SaveSession call <sid>save_session(<q-args>)
 command -nargs=0 -bang          SessionQuit SaveSession | q<bang>
 command -nargs=? -complete=file LoadSession call <sid>load_session(<q-args>, v:false)
+
+if exists('s:done_auto_load')
+    " only do the auto-load logic the first time the script is sourced
+    finish
+endif
 
 " when the script is loaded, check for whether we should auto-load anything
 if v:vim_did_enter
