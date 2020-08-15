@@ -24,7 +24,11 @@ endif
 
 function! s:save_session(name)
     if a:name == ""
-        let name = g:misdreavus_session_default
+        if empty(v:this_session)
+            let name = g:misdreavus_session_default
+        else
+            let name = v:this_session
+        endif
     else
         let name = a:name
     endif
