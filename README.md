@@ -35,8 +35,9 @@ session file.
 
 ### `:SessionQuit`
 
-`:SessionQuit[!]` calls `:SaveSession` with no argument (to save to the current or default session),
-then quits Vim. If a `!` is given to `:SessionQuit`, it will be passed to the `:q` command.
+`:SessionQuit[!] [filename]` calls `:SaveSession` with the given argument (to save the current
+session), then quits Vim. If a `!` is given to `:SessionQuit`, it will be passed to the `:q`
+command.
 
 ### `:LoadSession`
 

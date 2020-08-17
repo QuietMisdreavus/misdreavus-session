@@ -145,9 +145,9 @@ augroup MisdreavusSession
     autocmd VimLeavePre * call <sid>auto_save()
 augroup END
 
-command -nargs=? -complete=file SaveSession call <sid>save_session(<q-args>)
-command -nargs=0 -bang          SessionQuit SaveSession | q<bang>
-command -nargs=? -complete=file LoadSession call <sid>load_session(<q-args>, v:false)
+command -nargs=? -complete=file       SaveSession call <sid>save_session(<q-args>)
+command -nargs=? -complete=file -bang SessionQuit SaveSession <args> | q<bang>
+command -nargs=? -complete=file       LoadSession call <sid>load_session(<q-args>, v:false)
 
 if exists('s:done_auto_load')
     " only do the auto-load logic the first time the script is sourced
