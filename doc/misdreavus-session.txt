@@ -1,0 +1,90 @@
+*misdreavus-session.txt* Session management plugin
+
+misdreavus-session - A barebones session management plugin
+
+INTRODUCTION				*misdreavus-session*
+
+This plugin provides a simple wrapper around the built-in |:mksession|
+command, as well as facilities to automatically save and load session files
+from the current directory.
+
+
+==================================================================
+OPTIONS					*misdreavus-session-options*
+
+By default, misdreavus-session does not perform any additional behavior over
+what is already built-in to Vim. However, some additional functionality is
+available by setting some options before the plugin is loaded.
+
+
+g:misdreavus_session_autosave		*g:misdreavus_session_autosave*
+
+This setting controls the auto-save behavior when Vim is exited. When this
+setting is configured, misdreavus-session will automatically save the current
+state of Vim into a session when it is closed. This will only occur when a
+session has already been loaded or saved (i.e. |v:this_session| has the path
+to the session file).
+
+There are three possible values:
+
+- `'no'` (default) - Do not auto-save.
+- `'yes'`          - If a session file was loaded, automatically save to it on
+                   exit.
+- `'prompt'`       - Like `'yes'`, but prompt on exit if a session was not
+                   just saved.
+
+
+g:misdreavus_session_autoload		*g:misdreavus_session_autoload*
+
+This setting controls the auto-load behavior when Vim is opened. When this
+setting is configured, misdreavus-session will look for a session file in the
+current directory (with a name configured by |g:misdreavus_session_default|)
+and load it after all the startup plugins have been loaded. This will only
+occur when no argument list is given, and no session file is given on the
+command-line with |-S|.
+
+There are three possible values:
+
+- `'no'` (default) - Do not auto-load.
+- `'yes'`          - If a session file is available, automatically load it on
+                   startup.
+- `'prompt'`       - Like `'yes'`, but prompt on startup if a session is
+                   available.
+
+
+g:misdreavus_session_default		*g:misdreavus_session_default*
+
+This setting controls the default filename used for |:SaveSession|,
+|:LoadSession| and |g:misdreavus_session_autoload|. The default value is
+`'Session.vim'` (the default for |:mksession|).
+
+
+==================================================================
+COMMANDS				*misdreavus-session-commands*
+
+:SaveSession [filename]			*:SaveSession*
+		Save the current session to the given [filename]. If no name
+		is given, the value of |g:misdreavus_session_default| is used.
+
+
+:LoadSession [filename]
+		Load a session from the given [filename]. If no name is given,
+		the value of |g:misdreavus_session_default| is used.
+
+
+:SessionQuit[!] [filename]
+		Save the current session with |:SaveSession|, then quit Vim.
+		See |:quit| for the behavior with or without the [!].
+
+
+==================================================================
+FUNCTIONS				*misdreavus-session-functions*
+
+MisdreavusSessionStatus()		*MisdreavusSessionStatus()*
+		Returns 1 if a session has just been saved with
+		|:SaveSession|, or 0 if a change has happened since the last
+		save. Can be used to display whether the session is "dirty"
+		with respect to the file on disk.
+
+
+ vim:tw=78:ts=8:sts=0:sw=8:noet:ft=help:norl:
