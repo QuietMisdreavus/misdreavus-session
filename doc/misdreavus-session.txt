@@ -87,4 +87,15 @@ MisdreavusSessionStatus()		*MisdreavusSessionStatus()*
 		with respect to the file on disk.
 
 
+==================================================================
+AUTOCOMMANDS				*misdreavus-session-autocmds*
+
+SessionSavePre			*SessionSavePre* *SessionSavePre-autocmd*
+
+This |User| autocmd is triggered right before saving the session file in
+|:SaveSession|. This can be used for other plugins to serialize data to save
+in a session file (if `'globals'` is added to 'sessionoptions'). Globals saved
+in this manner can be loaded using the built-in |SessionLoadPost| autocmd.
+
+
  vim:tw=78:ts=8:sts=0:sw=8:noet:ft=help:norl:
